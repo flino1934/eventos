@@ -3,6 +3,7 @@ package com.saojudas.eventos.model.entity;
 import lombok.Data;
 
 import javax.persistence.*;
+import java.time.LocalDate;
 import java.util.Date;
 
 @Entity
@@ -21,7 +22,7 @@ public class Participante {//esta classe é responsavel pela entidade participan
     @Column(length = 11)
     private char sexo;
     @Column(name = "data_cadastro")
-    private Date dataCadastro;
+    private LocalDate dataCadastro;
 
     @ManyToOne
     @JoinColumn(name = "id_evento")// 1 evento varios participantes no banco de dados vai ter uma coluna com o id do evento FK
