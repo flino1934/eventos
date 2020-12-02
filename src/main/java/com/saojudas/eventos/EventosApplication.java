@@ -1,15 +1,7 @@
 package com.saojudas.eventos;
 
-import com.saojudas.eventos.model.entity.Evento;
-import com.saojudas.eventos.model.entity.model.repository.EventoRepository;
-import org.h2.command.Command;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.context.annotation.Bean;
-
-import java.util.Date;
 
 @SpringBootApplication
 public class EventosApplication {
