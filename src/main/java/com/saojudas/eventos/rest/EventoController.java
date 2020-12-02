@@ -8,8 +8,13 @@ import org.springframework.stereotype.Repository;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
+import javax.validation.Valid;
+import java.util.List;
+
+
 @RestController//faz esse controlador ser um REST
 @RequestMapping("/api/eventos")//URL base de dentro desse controller
+@CrossOrigin("http://localhost:4200")
 public class EventoController {
 
 
@@ -20,9 +25,14 @@ public class EventoController {
         this.repository = repository;
     }
 
+    @GetMapping
+    public List<Evento>obterTodos(){
+        return repository.findAll();
+    }
+
     @PostMapping//Para quando fizer uma solicitação post sera chamado diretamente esse metodo.
     @ResponseStatus(HttpStatus.CREATED)//se tudo ocorrer com sucesso vai retornar o status CREATED
-    public Evento salvar(@RequestBody Evento evento){//Indica que vai receber uma requesição passando os parametros
+    public Evento salvar(@RequestBody @Valid Evento evento){//Indica que vai receber uma requesição passando os parametros
         return repository.save(evento);
     }
 
@@ -45,10 +55,22 @@ public class EventoController {
                     repository.delete(evento);
                     return Void.TYPE;
                 }).
-                orElseThrow( () -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+                orElseThrow( () -> new ResponseStatusException(HttpStatus.NOT_FOUND,"Evento não encontrado"));
 //vai pesquisar pelo id se encontrar vai armazenar dentro do map e deletar, o map esta encontrando um obj do tipo evento
 
     }
 
+    @PutMapping("{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)//é uma resposta que foi bem sucedida em cache o usuario não precisa sair da pagina e
+    public void atualizar( @PathVariable Integer id, @RequestBody @Valid Evento eventoAtualizado){//vai passar o usuario atualizado pelo http
+        repository
+                .findById(id)
+                .map(evento ->{
+                    eventoAtualizado.setId(evento.getId());
+                    return repository.save(eventoAtualizado);
+                })
+                .orElseThrow( () -> new ResponseStatusException(HttpStatus.NOT_FOUND,"Evento não encontrado"));//caso não encontre vai retornar um erro
+
+    }
 
 }
